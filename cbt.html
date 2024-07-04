@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computer Science CBT Exam</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+
+    button {
+        display: block;
+        margin: 20px auto 0;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    .question {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    input[type="radio"] {
+        margin-right: 10px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Computer Science CBT Exam</h1>
+    <form id="quizForm" onsubmit="return false;">
+        <div id="questionContainer"></div>
+        <button onclick="submitQuiz()">Submit</button>
+    </form>
+    <div id="result"></div>
+</div>
+
+<script>
+    let currentQuestion = 0;
+    let score = 0;
+    const quizContainer = document.getElementById("questionContainer");
+    const resultContainer = document.getElementById("result");
+
+    const questions = [
+        {
+            question: "What does HTML stand for?",
+            options: ["Hyper Text Markup Language", "Home Tool Markup Language", "Hyperlinks and Text Markup Language", "Hyper Text Manipulation Language"],
+            correctIndex: 0
+        },
+        {
+            question: "Which tag is used to define an internal style sheet?",
+            options: ["<style>", "<script>", "<css>", "<link>"],
+            correctIndex: 0
+        },
+        {
+            question: "In JavaScript, which method is used to display a message box?",
+            options: ["alert()", "msg()", "prompt()", "confirm()"],
+            correctIndex: 0
+        },
+        {
+            question: "What does CSS stand for?",
+            options: ["Cascading Style Sheets", "Creative Style Sheets", "Computer Style Sheets", "Colorful Style Sheets"],
+            correctIndex: 0
+        },
+        {
+            question: "Which HTML attribute specifies an alternate text for an image, if the image cannot be displayed?",
+            options: ["src", "alt", "title", "href"],
+            correctIndex: 1
+        },
+        {
+            question: "In JavaScript, what is a function?",
+            options: ["A method that can be called", "A loop", "A variable", "A conditional statement"],
+            correctIndex: 0
+        },
+        {
+            question: "Which HTML element is used to define important text?",
+            options: ["<strong>", "<important>", "<bold>", "<em>"],
+            correctIndex: 0
+        },
+        {
+            question: "What is the correct JavaScript syntax to change the content of an HTML element?",
+            options: ["document.getElement('demo').innerHTML = 'Hello World!';", "#demo.innerHTML = 'Hello World!';", "document.getElementById('demo').innerHTML = 'Hello World!';", "document.getElementByName('demo').innerHTML = 'Hello World!';"],
+            correctIndex: 2
+        },
+        {
+            question: "What does DOM stand for?",
+            options: ["Document Object Model", "Data Object Model", "Dynamic Object Model", "Document Oriented Model"],
+            correctIndex: 0
+        },
+        {
+            question: "Which CSS property is used to change the text color of an element?",
+            options: ["color", "text-color", "font-color", "foreground-color"],
+            correctIndex: 0
+        },
+        {
+            question: "In JavaScript, how do you declare a variable?",
+            options: ["let myVar;", "variable myVar;", "var myVar;", "const myVar;"],
+            correctIndex: 2
+        },
+        {
+            question: "Which event occurs when the user clicks on an HTML element?",
+            options: ["onchange", "onclick", "onmouseover", "onmouseclick"],
+            correctIndex: 1
+        },
+        {
+            question: "What is the output of 4 + '4' in JavaScript?",
+            options: ["8", "44", "Error", "Undefined"],
+            correctIndex: 1
+        }
+    ];
+
+    function displayQuestion() {
+        const question = questions[currentQuestion];
+        let output = `<div class="question">${question.question}</div>`;
+        question.options.forEach((option, index) => {
+            output += `<label><input type="radio" name="answer" value="${index}"> ${option}</label>`;
+        });
+        quizContainer.innerHTML = output;
+    }
+
+    function submitQuiz() {
+        const selectedOption = document.querySelector('input[name="answer"]:checked');
+        if (!selectedOption) {
+            alert("Please select an answer.");
+            return;
+        }
+        const answerIndex = parseInt(selectedOption.value);
+        if (questions[currentQuestion].correctIndex === answerIndex) {
+            score++;
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        quizContainer.style.display = "none";
+        resultContainer.innerHTML = `<h2>Your Score: ${score} out of ${questions.length}</h2>`;
+        resultContainer.style.display = "block";
+    }
+
+    function login() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const rememberMe = document.getElementById('rememberMe').checked;
+        const captchaInput = document.getElementById('captchaInput').value;
+        const errorMessage = document.getElementById('errorMessage');
+        const loginButton = document.querySelector('#loginForm button');
+
+        // Disable login button and show loading state
+        loginButton.disabled = true;
+        loginButton.textContent = 'Logging in...';
+
+        // Simulate server-side authentication (replace with actual backend integration)
+        setTimeout(() => {
+            if (validateForm(username, password, captchaInput)) {
+                if (username === "admin" && password === "password123" && validateCaptcha(captchaInput)) {
+                    alert("Login successful!");
+                    localStorage.setItem('isLoggedIn', true);
+                    if (rememberMe) {
+                        localStorage.setItem('rememberedUsername', username);
+                    } else {
+                        localStorage.removeItem('rememberedUsername');
+                    }
+                    window.location.href = "/storage/emulated/0/index.html/cute.html"; // Redirect to CBT exam page
+                } else {
+                    errorMessage.textContent = "Invalid username, password, or captcha.";
+                }
+            }
+
+            // Re-enable login button
+            loginButton.disabled = false;
+            loginButton.textContent = 'Login';
+        }, 1000); // Simulated delay for server response
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        // Check if user is logged in
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        if (!isLoggedIn) {
+            // Redirect to login page if not logged in
+            alert("You need to log in first!");
+            window.location.href = "/storage/emulated/0/index.html/index.html";
+        } else {
+            // Display the CBT exam
+            displayQuestion();
+        }
+    });
+</script>
+</body>
+</html>
